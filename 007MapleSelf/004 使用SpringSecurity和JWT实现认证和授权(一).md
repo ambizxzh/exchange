@@ -90,6 +90,17 @@ eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImNyZWF0ZWQiOjE1NTY3NzkxMjUzMDksImV4cCI
 </dependency>
 ```
 
+## 在application.yml中添加jwt的初始设置
+
+```yaml
+# 自定义jwt key
+jwt:
+  tokenHeader: Authorization #JWT存储的请求头
+  secret: mySecret #JWT加解密使用的密钥
+  expiration: 604800 #JWT的超期限时间(60*60*24)
+  tokenHead: Bearer  #JWT负载中拿到开头
+```
+
 
 
 ### 添加JWT token的工具类
@@ -133,7 +144,7 @@ public class JwtTokenUtil {
     private Long expiration;
 
     /**
-     * 根据负责生成JWT的token
+     * 根据负载生成JWT的token
      */
     private String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
@@ -505,6 +516,32 @@ public class AdminUserDetails implements UserDetails {
 
 ```
 
+#### 添加UmsAdminLoginParam
+
+```java
+package com.maple.web.dto;
+
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.validator.constraints.NotEmpty;
+
+/**
+ * 用户登录参数
+ */
+@Getter
+@Setter
+public class UmsAdminLoginParam {
+    @ApiModelProperty(value = "用户名", required = true)
+    @NotEmpty(message = "用户名不能为空")
+    private String username;
+    @ApiModelProperty(value = "密码", required = true)
+    @NotEmpty(message = "密码不能为空")
+    private String password;
+
+}
+```
+
 #### 添加UmsAdminRoleRelationDao(添加了Dao后一定要在MyBatisConfig类前加上扫描Dao的语句)
 
 扫描dao的语句  @MapperScan({"com.maple.web.mbg.mapper", **"com.maple.web.dao"**})
@@ -606,7 +643,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
 **错误参考解释**:https://stackoverflow.com/questions/40345927/could-not-resolve-placeholder-jwt-secret-in-string-value-jwt-secret
 
-**解决方法**:在application.yml中添加jwt配置
+**解决方法**:在application.yml中添加jwt配置,与spring的分支同级,都是顶级分支
 
 ```yaml
 # 自定义jwt key
