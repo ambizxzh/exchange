@@ -1,0 +1,9 @@
+1，Mysql  讲究自己的实际操作能力(《高性能Mysql》)
+2，java的几种学习
+“抛弃struts spring hibernate构成的ssh
+学习springmvc spring mybasics 构成的ssm，对应的有java EE的spring boot 、spring cloud框架”
+Spring cloud
+Spring boot
+Mybasic
+设计模式
+3，算法 天天刷题
