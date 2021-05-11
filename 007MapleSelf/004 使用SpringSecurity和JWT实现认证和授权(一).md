@@ -247,13 +247,13 @@ public class JwtTokenUtil {
 
 ```
 
-### 添加SpringSecurity的配置类
+### 添加SpringSecurity的配置类(继承自WebSecurityConfigurerAdapter)
 
 ```java
 package com.maple.web.config;
 
 import com.maple.web.component.JwtAuthenticationTokenFilter;
-import com.maple.web.component.RestAuthenticationEntryPoint;
+import com.maple.web.component.RestfulAuthenticationEntryPoint;
 import com.maple.web.component.RestfulAccessDeniedHandler;
 import com.maple.web.dto.AdminUserDetails;
 import com.maple.web.mbg.model.UmsAdmin;
@@ -291,7 +291,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private RestfulAccessDeniedHandler restfulAccessDeniedHandler;
     @Autowired
-    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    private RestfulAuthenticationEntryPoint RestfulAuthenticationEntryPoint;
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -327,7 +327,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //添加自定义未授权和未登录结果返回
         httpSecurity.exceptionHandling()
                 .accessDeniedHandler(restfulAccessDeniedHandler)
-                .authenticationEntryPoint(restAuthenticationEntryPoint);
+                .authenticationEntryPoint(RestfulAuthenticationEntryPoint);
     }
 
     @Override
@@ -374,7 +374,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 - configure(HttpSecurity httpSecurity)：用于配置需要拦截的url路径、jwt过滤器及出异常后的处理器；
 - configure(AuthenticationManagerBuilder auth)：用于配置UserDetailsService及PasswordEncoder；
 - RestfulAccessDeniedHandler：当用户没有访问权限时的处理器，用于返回JSON格式的处理结果；
-- RestAuthenticationEntryPoint：当未登录或token失效时，返回JSON格式的结果；
+- RestfulAuthenticationEntryPoint：当未登录或token失效时，返回JSON格式的结果；
 - UserDetailsService:SpringSecurity定义的核心接口，用于根据用户名获取用户信息，需要自行实现；
 - UserDetails：SpringSecurity定义用于封装用户信息的类（主要是用户信息和权限），需要自行实现；
 - PasswordEncoder：SpringSecurity定义的用于对密码进行编码及比对的接口，目前使用的是BCryptPasswordEncoder；
@@ -382,7 +382,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 ### 添加组件component
 
-#### 添加RestfulAccessDeniedHandler
+#### 添加RestfulAccessDeniedHandler(ConfigurerAdapter中的builder的类HttpSecurity的自定义输入值)
 
 ```java
 package com.maple.web.component;
@@ -416,7 +416,7 @@ public class RestfulAccessDeniedHandler implements AccessDeniedHandler{
 
 ```
 
-#### 添加RestAuthenticationEntryPoint
+#### 添加RestfulAuthenticationEntryPoint(ConfigurerAdapter中的builder的类HttpSecurity的自定义输入值)
 
 ```java
 package com.maple.web.component;
@@ -436,13 +436,77 @@ import java.io.IOException;
  * 当未登录或者token失效访问接口时，自定义的返回结果
  */
 @Component
-public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class RestfulAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         response.getWriter().println(JSONUtil.parse(CommonResult.unauthorized(authException.getMessage())));
         response.getWriter().flush();
+    }
+}
+
+```
+
+#### 添加JwtAuthenticationTokenFilter(ConfigurerAdapter中的builder的类HttpSecurity的自定义输入值)
+
+> 在用户名和密码校验前添加的过滤器，如果请求中有jwt的token且有效，会取出token中的用户名，然后调用SpringSecurity的API进行登录操作。
+
+```java
+package com.maple.web.component;
+
+import com.maple.web.common.utils.JwtTokenUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+/**
+ * JWT登录授权过滤器
+ */
+public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationTokenFilter.class);
+    @Autowired
+    private UserDetailsService userDetailsService;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+    @Value("${jwt.tokenHeader}")
+    private String tokenHeader;
+    @Value("${jwt.tokenHead}")
+    private String tokenHead;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain chain) throws ServletException, IOException {
+        String authHeader = request.getHeader(this.tokenHeader);
+        if (authHeader != null && authHeader.startsWith(this.tokenHead)) {
+            String authToken = authHeader.substring(this.tokenHead.length());// The part after "Bearer "
+            String username = jwtTokenUtil.getUserNameFromToken(authToken);
+            LOGGER.info("checking username:{}", username);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+                if (jwtTokenUtil.validateToken(authToken, userDetails)) {
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    LOGGER.info("authenticated user:{}", username);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }
+        }
+        chain.doFilter(request, response);
     }
 }
 
@@ -565,70 +629,6 @@ public interface UmsAdminRoleRelationDao {
      */
     List<UmsPermission> getPermissionList(@Param("adminId") Long adminId);
 }
-```
-
-#### 添加JwtAuthenticationTokenFilter
-
-> 在用户名和密码校验前添加的过滤器，如果请求中有jwt的token且有效，会取出token中的用户名，然后调用SpringSecurity的API进行登录操作。
-
-```java
-package com.maple.web.component;
-
-import com.maple.web.common.utils.JwtTokenUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.web.filter.OncePerRequestFilter;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
-/**
- * JWT登录授权过滤器
- */
-public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
-    private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationTokenFilter.class);
-    @Autowired
-    private UserDetailsService userDetailsService;
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-    @Value("${jwt.tokenHeader}")
-    private String tokenHeader;
-    @Value("${jwt.tokenHead}")
-    private String tokenHead;
-
-    @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain chain) throws ServletException, IOException {
-        String authHeader = request.getHeader(this.tokenHeader);
-        if (authHeader != null && authHeader.startsWith(this.tokenHead)) {
-            String authToken = authHeader.substring(this.tokenHead.length());// The part after "Bearer "
-            String username = jwtTokenUtil.getUserNameFromToken(authToken);
-            LOGGER.info("checking username:{}", username);
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-                if (jwtTokenUtil.validateToken(authToken, userDetails)) {
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    LOGGER.info("authenticated user:{}", username);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
-            }
-        }
-        chain.doFilter(request, response);
-    }
-}
-
 ```
 
 #### 给自定义的Dao接口语句新建自定义的mysql查询UmsAdminRoleRelationDao

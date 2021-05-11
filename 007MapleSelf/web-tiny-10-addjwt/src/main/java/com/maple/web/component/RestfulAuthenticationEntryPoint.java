@@ -11,9 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/*
-* 当未登录或者或者token失效时访问接口,自定义响应
-* */
+
+/**
+ * com.maple.web.config.SecurityConfig 的子组件
+ *当未登录或者或者token失效时访问接口,自定义响应
+ *@author zxzh
+ *@date 2021/5/10
+ */
 @Component
 public class RestfulAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override

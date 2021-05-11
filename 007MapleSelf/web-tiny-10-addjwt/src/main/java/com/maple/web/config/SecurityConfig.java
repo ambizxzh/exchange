@@ -37,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private RestfulAuthenticationEntryPoint restfulAuthenticationEntryPoint;
 
+    //1.重写configure(HttpSecurity httpSecurity)
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf()// 由于使用的是JWT，我们这里不需要csrf
@@ -60,8 +61,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(HttpMethod.OPTIONS)//跨域请求会先进行一次options请求
                 .permitAll()
-//                .antMatchers("/**")//测试时全部运行访问
-//                .permitAll()
                 .anyRequest()// 除上面外的所有请求全部需要鉴权认证
                 .authenticated();
         // 禁用缓存
@@ -74,6 +73,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(restfulAuthenticationEntryPoint);
     }
 
+    @Bean
+    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter(){
+        return new JwtAuthenticationTokenFilter();
+    }
+
+
+    //2.重写configure(AuthenticationManagerBuilder auth)
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService())
@@ -98,11 +104,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         };
     }
 
-    @Bean
-    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter(){
-        return new JwtAuthenticationTokenFilter();
-    }
-
+    //3.重写authenticationManagerBean(),直接调用父类
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
