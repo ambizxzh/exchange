@@ -1,5 +1,3 @@
-学习不走弯路，[关注公众号](#公众号) 回复「学习路线」，获取mall项目专属学习路线！
-
 # SpringBoot应用中使用AOP记录接口访问日志
 
 > 本文主要讲述AOP在mall项目中的应用，通过在controller层建一个切面来实现接口访问的统一日志记录。
@@ -50,15 +48,23 @@
 指定了通知被应用的范围，表达式格式：
 ```java
 execution(方法修饰符 返回类型 方法所属的包.类名.方法名称(方法参数)
+          
+          
+execution(<scope> <return-type> <fully-qualified-class-name>.*(parameters))
+ //scope ：方法作用域，如public,private,protect
+//returnt-type：方法返回值类型
+//fully-qualified-class-name：方法所在类的完全限定名称
+//parameters 方法参数
+
 ```
 
 ```java
-//com.macro.mall.tiny.controller包中所有类的public方法都应用切面里的通知
-execution(public * com.macro.mall.tiny.controller.*.*(..))
-//com.macro.mall.tiny.service包及其子包下所有类中的所有方法都应用切面里的通知
-execution(* com.macro.mall.tiny.service..*.*(..))
-//com.macro.mall.tiny.service.PmsBrandService类中的所有方法都应用切面里的通知
-execution(* com.macro.mall.tiny.service.PmsBrandService.*(..))
+//com.com.maple.web.controller包中所有类的public方法都应用切面里的通知
+execution(public * com.com.maple.web.controller.*.*(..))
+//com.com.maple.web.service包及其子包下所有类中的所有方法都应用切面里的通知
+execution(* com.com.maple.web.service..*.*(..))
+//com.com.maple.web.service.PmsBrandService类中的所有方法都应用切面里的通知
+execution(* com.com.maple.web.service.PmsBrandService.*(..))
 ```
 
 ## 添加AOP切面实现接口日志记录
@@ -68,11 +74,10 @@ execution(* com.macro.mall.tiny.service.PmsBrandService.*(..))
 > 用于封装需要记录的日志信息，包括操作的描述、时间、消耗时间、url、请求参数和返回结果等信息。
 
 ```java
-package com.macro.mall.tiny.dto;
+package com.com.maple.web.dto;
 
 /**
  * Controller层的日志封装类
- * Created by macro on 2018/4/26.
  */
 public class WebLog {
     /**
@@ -140,12 +145,12 @@ public class WebLog {
 > 定义了一个日志切面，在环绕通知中获取日志需要的信息，并应用到controller层中所有的public方法中去。
 
 ```java
-package com.macro.mall.tiny.component;
+package com.com.maple.web.component;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.json.JSONUtil;
-import com.macro.mall.tiny.dto.WebLog;
+import com.com.maple.web.dto.WebLog;
 import io.swagger.annotations.ApiOperation;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -172,7 +177,6 @@ import java.util.Map;
 
 /**
  * 统一日志处理切面
- * Created by macro on 2018/4/26.
  */
 @Aspect
 @Component
@@ -180,7 +184,7 @@ import java.util.Map;
 public class WebLogAspect {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebLogAspect.class);
 
-    @Pointcut("execution(public * com.macro.mall.tiny.controller.*.*(..))")
+    @Pointcut("execution(public * com.com.maple.web.controller.*.*(..))")
     public void webLog() {
     }
 

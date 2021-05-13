@@ -180,9 +180,11 @@ InnoDB引擎用的索引底层是B+树
 
 https://blog.csdn.net/sinat_41917109/article/details/88944290
 
-E:\001 java\JavaGuide\docs\database
+\001 java\JavaGuide\docs\database
 
-最左匹配原则: 最左优先，以最左边的为起点任何连续的索引都能匹配上。同时遇到范围查询(>、<、between、like、模糊查询等)时,非最左的索引值的匹配就会停止匹配
+最左匹配原则: 最左优先，**以最左边的为起点**任何**连续**的索引都能匹配上。同时遇到范围查询(>、<、between、like、模糊查询等)时,非最左的索引值的匹配就会停止匹配, 范围索引的右边的索引会失效(如果范围索引左边都是符合最左索引，范围索引会有效,但范围索引右边不会失效),因为范围索引会导致后续的索引字段变得无序。
+
+最左匹配索引详解以及索引优化查询问题:https://www.cnblogs.com/-mrl/p/13230006.html
 
 
 
@@ -492,13 +494,21 @@ public class AlternatePrintTest {//两个线程交替打印
 
 Spring IoC控制反转:
 
-[Spring IoC有什么好处呢？ - 知乎 (zhihu.com)
+[Spring IoC有什么好处呢？ - 知乎 (zhihu.com)](https://www.zhihu.com/question/23277575)
 
 [**所谓依赖注入，就是把底层类作为参数传入上层类，实现上层类对下层类的“控制**”
 
 依赖注入的方式:构造方法、**Setter传递**和**接口传递**。核心思路都是一样的，都是为了实现**控制反转**
 
 Spring AOP 面向切面编程
+
+
+
+ BeanFactory和ApplicationContext的区别:
+
+https://www.jianshu.com/p/fd8e441b98c8
+
+本质区别:前者懒加载(延迟加载),后者为非懒加载,但也可以设置为懒加载
 
 
 
