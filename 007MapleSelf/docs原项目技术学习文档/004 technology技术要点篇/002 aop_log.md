@@ -142,7 +142,7 @@ public class WebLog {
 
 ### 添加切面类WebLogAspect
 
-> 定义了一个日志切面，在环绕通知中获取日志需要的信息，并应用到controller层中所有的public方法中去。
+> 定义了一个日志切面，在环绕通知中获取日志需要的信息，并应用到controller层中所有的public方法中去。结合链接内容[Spring核心系列之AOP(一) (juejin.cn)](https://juejin.cn/post/6844903549172711437)对AOP进行应用
 
 ```java
 package com.com.maple.web.component;
@@ -197,7 +197,7 @@ public class WebLogAspect {
     }
 
     @Around("webLog()")
-    public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {//这里必须要有返回值,否则不会把数据传到前端去,而会被这里截留
         long startTime = System.currentTimeMillis();
         //获取当前请求对象
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();

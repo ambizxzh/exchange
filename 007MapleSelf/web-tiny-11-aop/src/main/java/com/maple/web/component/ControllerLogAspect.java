@@ -50,7 +50,7 @@ public class ControllerLogAspect {
     public void doAfterReturn(Object returnResult) throws Throwable{}
 
     @Around("pointCutLog()")
-    public void doAround(ProceedingJoinPoint joinPoint) throws Throwable{
+    public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable{
         long startTime = System.currentTimeMillis();//现在的时间戳,毫秒
         //解析出切点的方法
         Object result = joinPoint.proceed();//执行结果.要抛出可抛出的异常 throw Throwable
@@ -79,6 +79,7 @@ public class ControllerLogAspect {
         controllerLog.setUri(request.getRequestURI());
         controllerLog.setUrl(urlStr);
         LOGGER.info("{}", JSONUtil.parse(controllerLog));//将对象格式化存在日志里,便于阅读
+        return result;//这个必须和方法的返回值都有,否则,内容会被这里截留,而不会传到前端
     }
 
     private Object getParameter(Method method, Object[] args){

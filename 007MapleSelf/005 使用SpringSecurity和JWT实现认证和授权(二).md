@@ -371,9 +371,7 @@ Swagger api地址：http://localhost:8080/swagger-ui.html
 
 ### 改用其他有权限的帐号登录
 
-> 改用admin 123456登录后访问，点击Authorize按钮打开弹框,点击logout登出后再重新输入新token。
-
-`注意`：如果admin帐号密码不对的话，公众号后台回复`体验`来获取。
+> 改用testone123456登录后访问，点击Authorize按钮打开弹框,点击logout登出后再重新输入新token。也可以重新使用/admin/register注册一个超级权限的管理员,这个testone 123456就是我注册的
 
 ![](D:/IntelliJ IDEA/_zxzh workspace/004mallCloneFromGithub/mall-learning/docs/images/arch_screen_22.png)
 
