@@ -570,3 +570,66 @@ map  filter count sorted limit skip
 spring AOP用到了动态代理
 
 [面试题-静态代理和动态代理的区别，什么场景使用？_赵大土的博客-CSDN博客_静态代理和动态代理的区别,什么场景使用?](https://blog.csdn.net/weixin_43647393/article/details/103281623)
+
+## 25.算法 二分
+
+二分模板 和 快乘模板[【宫水三叶】严格 O(logN)，一起看清二分的本质 ... - 搜索旋转排序数组 - 力扣（LeetCode） (leetcode-cn.com)](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/solution/shua-chuan-lc-yan-ge-ologn100yi-qi-kan-q-xifo/)
+
+**「二分」的本质是两段性，并非单调性。只要一段满足某个性质，另外一段不满足某个性质，就可以用「二分」。**
+
+二分在更新左右边界时，为了避免死循环(因为 >> 和 直接使用 / 一样，都属于「下取整」操作。)，需要给左边界left加1处理，不用同时让右边界减1(请抛弃右边界减1的思想，这个思想不会降低很多的复杂度，反而造成的不必要的判断)，通用模板是在更新左边界时 left = mid + 1;  以下三种等效，都等效于`更新左边界使用了left = mid + 1，更新右边界只使用了 right = mid`，建议用**第二种模板，在更新mid时才加上1**
+
+```java
+int left = 0, right = 1000009;
+while (left < right) {
+    int mid = left + right + 1 >> 1;//这样的加法容易有溢出,使用第二种模板的 更新 mid值 能避免溢出
+    if (check(mid)) {
+        left = mid;
+    } else {
+        right = mid - 1;
+    }
+}
+```
+
+```java
+int left = 0, right = 1000009;
+while (left < right) {
+    int mid = left + (right - left + 1 >> 1);//加括号是控制优先级,由于 ">>"优先级特别低, 会在所有运算完成后才进行操作
+    if (check(mid)) {
+        left = mid;
+    } else {
+        right = mid - 1;
+    }
+}
+
+```
+
+```java
+int left = 0, right = 1000009;
+while (left < right) {
+    int mid = left + (right - left >> 1);
+    if (check(mid)) {
+        left = mid + 1;//这个加1放在左边界有点难以判断最后的目标值位置
+    } else {
+        right = mid;
+    }
+}
+```
+
+二分的一些经典题目:
+二分模板
+29. 两数相除 : 二分 + 倍增乘法解法（含模板） //倍增乘法在 剑指 Offer 16数值的整数次方 也有体现
+
+二分本质 & 恢复二段性处理
+
+33. 搜索旋转排序数组（找目标值） : 严格 O(logN)，一起看清二分的本质
+
+81. 搜索旋转排序数组 II（找目标值） : 详解为何元素相同会导致 O(n)，一起看清二分的本质
+
+153. 寻找旋转排序数组中的最小值（找最小值） : 严格 O(logN)，一起看清二分的本质
+
+154. 寻找旋转排序数组中的最小值 II（找最小值） : 详解为何元素相同会导致 O(n)，一起看清二分的本质
+
+二分 check 函数如何确定
+34. 在排序数组中查找元素的第一个和最后一个位置 : 考察对「二分」的理解，以及 check 函数的「大于 小于」怎么写
+
