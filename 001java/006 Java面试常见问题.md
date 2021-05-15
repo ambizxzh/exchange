@@ -575,25 +575,22 @@ spring AOP用到了动态代理
 
 二分模板 和 快乘模板[【宫水三叶】严格 O(logN)，一起看清二分的本质 ... - 搜索旋转排序数组 - 力扣（LeetCode） (leetcode-cn.com)](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/solution/shua-chuan-lc-yan-ge-ologn100yi-qi-kan-q-xifo/)
 
+二分查找的循环退出条件讨论:[关于 while (left <= right) 写法返回值的详细讨论 - 在排序数组中查找元素的第一个和最后一个位置 - 力扣（LeetCode） (leetcode-cn.com)](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/solution/da-jia-bu-yao-kan-labuladong-de-jie-fa-fei-chang-2/)
+
+
+
 **「二分」的本质是两段性，并非单调性。只要一段满足某个性质，另外一段不满足某个性质，就可以用「二分」。**
 
-二分在更新左右边界时，为了避免死循环(因为 >> 和 直接使用 / 一样，都属于「下取整」操作。)，需要给左边界left加1处理，不用同时让右边界减1(请抛弃右边界减1的思想，这个思想不会降低很多的复杂度，反而造成的不必要的判断)，通用模板是在更新左边界时 left = mid + 1;  以下三种等效，都等效于`更新左边界使用了left = mid + 1，更新右边界只使用了 right = mid`，建议用**第二种模板，在更新mid时才加上1**
+二分在更新左右边界时，为了避免死循环(因为 `>>` 和 直接使用 `/` 一样，都属于「下取整」操作。)，需要给左边界left加1处理，不用同时让右边界减1(这里的循环结束的条件是left < right，所以只需left = mid + 1或right = mid-1中的一个就行;循环结束条件为left<=right,则需要同时left=mid+1和right=mid-1)，通用模板是在更新左边界时 left = mid + 1;  以下两种模板的三种情况等效，都等效于`更新左边界使用了left = mid + 1，更新右边界只使用了 right = mid`，建议用**模板1的情况1，在更新mid时才加上1**
+
+
 
 ```java
+//模板1:循环结束条件为left < right的模板。两种情况mid更新情况
+//    情况1: mid = left + (right - left + 1 >> 1)
 int left = 0, right = 1000009;
 while (left < right) {
-    int mid = left + right + 1 >> 1;//这样的加法容易有溢出,使用第二种模板的 更新 mid值 能避免溢出
-    if (check(mid)) {
-        left = mid;
-    } else {
-        right = mid - 1;
-    }
-}
-```
-
-```java
-int left = 0, right = 1000009;
-while (left < right) {
+    //int mid = left + right + 1 >> 1;//这样的加法容易有溢出,使用下面的 更新 mid值 能避免溢出
     int mid = left + (right - left + 1 >> 1);//加括号是控制优先级,由于 ">>"优先级特别低, 会在所有运算完成后才进行操作
     if (check(mid)) {
         left = mid;
@@ -602,9 +599,7 @@ while (left < right) {
     }
 }
 
-```
-
-```java
+//情况2: mid = left + (right - left >> 1)
 int left = 0, right = 1000009;
 while (left < right) {
     int mid = left + (right - left >> 1);
@@ -616,8 +611,24 @@ while (left < right) {
 }
 ```
 
+
+
+```java
+//模板2: 循环结束条件为left <= right的模板。
+int left = 0, right = 1000009;
+while (left <= right) {
+    int mid = left + (right - left >> 1);
+    if (check(mid)) {
+        left = mid + 1;
+    } else {
+        right = mid + 1;
+    }
+}
+```
+
 二分的一些经典题目:
 二分模板
+
 29. 两数相除 : 二分 + 倍增乘法解法（含模板） //倍增乘法在 剑指 Offer 16数值的整数次方 也有体现
 
 二分本质 & 恢复二段性处理

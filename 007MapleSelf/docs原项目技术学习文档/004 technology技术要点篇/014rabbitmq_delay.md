@@ -1,5 +1,3 @@
-学习不走弯路，[关注公众号](#公众号) 回复「学习路线」，获取mall项目专属学习路线！
-
 # RabbitMQ实现延迟消息居然如此简单，整个插件就完事了！
 
 > RabbitMQ实现延迟消息的方式有两种，一种是使用`死信队列`实现，另一种是使用`延迟插件`实现。`死信队列`实现我们以前曾经讲过，具体参考[《mall整合RabbitMQ实现延迟消息》](https://mp.weixin.qq.com/s/Rp4TfejQkYN00oQ-kMCRcg)，这次我们讲个更简单的，使用`延迟插件`实现。
@@ -54,9 +52,9 @@ spring:
   rabbitmq:
     host: localhost # rabbitmq的连接地址
     port: 5672 # rabbitmq的连接端口号
-    virtual-host: /mall # rabbitmq的虚拟host
-    username: mall # rabbitmq的用户名
-    password: mall # rabbitmq的密码
+    virtual-host: /maple # rabbitmq的虚拟host
+    username: maple # rabbitmq的用户名
+    password: admin2020 # rabbitmq的密码
     publisher-confirms: true #如果对异步消息需要回调必须设置为true
 ```
 
@@ -65,7 +63,6 @@ spring:
 ```java
 /**
  * 消息队列配置
- * Created by macro on 2018/9/14.
  */
 @Configuration
 public class RabbitMqConfig {
@@ -109,7 +106,6 @@ public class RabbitMqConfig {
 ```java
 /**
  * 取消订单消息的发出者
- * Created by macro on 2018/9/14.
  */
 @Component
 public class CancelOrderSender {
@@ -137,10 +133,9 @@ public class CancelOrderSender {
 ```java
 /**
  * 取消订单消息的处理者
- * Created by macro on 2018/9/14.
  */
 @Component
-@RabbitListener(queues = "mall.order.cancel.plugin")
+@RabbitListener(queues = "maple.order.cancel.plugin")
 public class CancelOrderReceiver {
     private static Logger LOGGER =LoggerFactory.getLogger(CancelOrderReceiver.class);
     @Autowired
@@ -158,7 +153,6 @@ public class CancelOrderReceiver {
 ````java
 /**
  * 前台订单管理Service
- * Created by macro on 2018/8/30.
  */
 @Service
 public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
@@ -168,7 +162,7 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
 
     @Override
     public CommonResult generateOrder(OrderParam orderParam) {
-        //todo 执行一系类下单操作，具体参考mall项目
+        //todo 执行一系类下单操作，具体参考maple项目
         LOGGER.info("process generateOrder");
         //下单完成后开启一个延迟消息，用于当用户没有付款时取消订单（orderId应该在下单后生成）
         sendDelayMessageCancelOrder(11L);
@@ -177,7 +171,7 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
 
     @Override
     public void cancelOrder(Long orderId) {
-        //todo 执行一系类取消订单操作，具体参考mall项目
+        //todo 执行一系类取消订单操作，具体参考maple项目
         LOGGER.info("process cancelOrder orderId:{}",orderId);
     }
 
@@ -224,6 +218,3 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
 
 https://github.com/macrozheng/mall-learning/tree/master/mall-tiny-delay
 
-## 公众号
-
-![公众号图片](http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/banner/qrcode_for_macrozheng_258.jpg)

@@ -62,7 +62,7 @@ Kafka 主要有两大应用场景：
 
 ### 什么是Producer、Consumer、Broker、Topic、Partition？
 
-Kafka 将生产者发布的消息发送到 **Topic（主题）** 中，需要这些消息的消费者可以订阅这些 **Topic（主题）**，如下图所示：
+Kafka 将生产者发布的消息发送到 **Topic（主题,与RabbitMQ中的Exchange相似）** 中，需要这些消息的消费者可以订阅这些 **Topic（主题）**，如下图所示：
 
 ![Kafka Topic Partition](https://my-blog-to-use.oss-cn-beijing.aliyuncs.com/2019-11/KafkaTopicPartitioning.png)
 
