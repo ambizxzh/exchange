@@ -92,7 +92,11 @@ Kafka 将生产者发布的消息发送到 **Topic（主题,与RabbitMQ中的Exc
 
 ### Zookeeper 在 Kafka 中的作用知道吗？
 
-> **要想搞懂 zookeeper 在 Kafka 中的作用 一定要自己搭建一个 Kafka 环境然后自己进 zookeeper 去看一下有哪些文件夹和 Kafka 有关，每个节点又保存了什么信息。** 一定不要光看不实践，这样学来的也终会忘记！这部分内容参考和借鉴了这篇文章：https://www.jianshu.com/p/a036405f989c 。
+> **要想搞懂 zookeeper 在 Kafka 中的作用 一定要自己搭建一个 Kafka 环境然后自己进 zookeeper 去看一下有哪些文件夹和 Kafka 有关，每个节点又保存了什么信息。** 一定不要光看不实践，这样学来的也终会忘记！这部分内容参考和借鉴了这篇文章：
+>
+> https://www.jianshu.com/p/a036405f989c 。
+>
+> https://mp.weixin.qq.com/s/AxheNpPdLPX-huINZ7o91Q
 
 
 
