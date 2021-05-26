@@ -28,23 +28,23 @@ SpringBoot从本质上来说就是Spring，它通过了一些自己的特性帮�
 
 - 首先通过`File->New Project`来创建一个项目；
 
-![](../images/springboot_start_01.png)
+![](./images/springboot_start_01.png)
 
 - 然后选择通过`Spring Initializr`来创建一个SpringBoot应用；
 
-![](../images/springboot_start_02.png)
+![](./images/springboot_start_02.png)
 
 - 填写好Maven项目的`groupId`和`artifactId`及选择好Java版本；
 
-![](../images/springboot_start_03.png)
+![](./images/springboot_start_03.png)
 
 - 选择好起步依赖，这里选择的是开启Web功能的起步依赖；
 
-![](../images/springboot_start_04.png)
+![](./images/springboot_start_04.png)
 
 - 选择好项目的存放位置即可顺利创建一个SpringBoot应用。
 
-![](../images/springboot_start_05.png)
+![](./images/springboot_start_05.png)
 
 ### 查看应用
 
@@ -196,7 +196,7 @@ SpringBoot项目可以使用Maven进行构建，首先我们需要继承`spring-
 
 如果是Spring项目的话，我们需要添加很多依赖，还需要考虑各个依赖版本的兼容性问题，是个相当麻烦的事情。
 
-![](../images/springboot_start_06.png)
+![](./images/springboot_start_06.png)
 
 #### 指定基于功能的依赖
 

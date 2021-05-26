@@ -539,9 +539,13 @@ synchronized修饰方法和静态方法
 
 当然如果是小于64的时候，因为是采用了ziplist的设计，其时间复杂度为O(n)
 
-**Redis持久化RDB和AOF**
+**Redis持久化RDB(快照,snapshoting)和AOF**
 
 [Redis 持久化](https://www.redis.com.cn/redis-persistence.html#:~:text=redis 提供了两种持久化的方式，分别是 RDB （Redis,DataBase）和 AOF （Append Only File）。)
+
+**Redis的数据一致性**
+
+[(10)redis缓存问题与数据一致性问题 - 简书 (jianshu.com)](https://www.jianshu.com/p/4eaff0992f54)
 
 ## 21.JavaIO
 
@@ -643,4 +647,6 @@ while (left <= right) {
 
 二分 check 函数如何确定
 34. 在排序数组中查找元素的第一个和最后一个位置 : 考察对「二分」的理解，以及 check 函数的「大于 小于」怎么写
+
+
 

@@ -30,7 +30,7 @@ yum install docker-ce
 systemctl start docker
 ```
 
-## MySQL安装
+## MySQL安装(在主从复制的操作实践后,我删除了这个名为mysql的容器,添加了mysql-master和mysql-slave两个容器,其实就是建立了几个名字不同的容器,操作步骤还是下面的步骤)
 
 - 下载MySQL`8.0.15`的docker镜像(获取一个新镜像: docker pull 镜像名:镜像版本)：
 
@@ -61,7 +61,7 @@ docker run -p 3306:3306 --name mysql \
 
   [Docker run 命令 | 菜鸟教程 (runoob.com)](https://www.runoob.com/docker/docker-run-command.html)
 
-  - -p 3306:3306：将容器的3306端口映射到主机的3306端口
+  - -p 3306:3306：将容器的3306端口(冒号后面的是容器的端口)映射到主机的3306端口
   - --volume , -v: 绑定一个卷
   - --name mysql:  (重命名)命名该运行的(容器)进程的名称为mysql
   - -v /mydata/mysql/conf:/etc/mysql：将容器中的配置文件夹(/etc/mysql)挂载到主机(/mydata/mysql/conf)
@@ -507,9 +507,14 @@ java                  8                   d23bdf5b1b1b        3 years ago       
     如
 
     ```bash
-    docker start redis mongo elasticsearch kibana rabbitmq mysql nginx logstash
+    
+    ## 主从复制实践之前
+docker start redis mongo elasticsearch kibana rabbitmq mysql nginx 
+    
+    ## 主从复制实践之后,删除了mysql容器,改为添加mysql-master容器和mysql-slave容器
+    docker start mysql-master mysql-slave redis mongo elasticsearch kibana rabbitmq nginx
     ```
-
+    
     
 
 ![](../images/mall_linux_deploy_10.png)
