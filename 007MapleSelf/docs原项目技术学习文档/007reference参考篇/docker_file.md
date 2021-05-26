@@ -1,5 +1,3 @@
-学习不走弯路，[关注公众号](#公众号) 回复「学习路线」，获取mall项目专属学习路线！
-
 # 使用Dockerfile为SpringBoot应用构建Docker镜像
 
 > 上次写过一篇[使用Maven插件构建Docker镜像](https://mp.weixin.qq.com/s/q2KDzHbPkf3Q0EY8qYjYgw) ，讲述了通过docker-maven-plugin来构建docker镜像的方式，此种方式需要依赖自建的Registry镜像仓库。本文将讲述另一种方式，使用Dockerfile来构建docker镜像，此种方式不需要依赖自建的镜像仓库，只需要应用的jar包和一个Dockerfile文件即可。
@@ -205,6 +203,4 @@ docker run -p 8080:8080 --name mall-tiny-docker-file \
 
 [https://github.com/macrozheng/mall-learning/tree/master/mall-tiny-docker-file](https://github.com/macrozheng/mall-learning/tree/master/mall-tiny-docker-file)
 
-## 公众号
 
-![公众号图片](http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/banner/qrcode_for_macrozheng_258.jpg)

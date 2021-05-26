@@ -40,7 +40,6 @@ docker pull mysql:8.0.15
 
 - 使用如下命令启动MySQL服务(运行镜像: docker run 镜像名:镜像版本)：
 
-    
 
 ```bash
 docker run -p 3306:3306 --name mysql \
@@ -57,7 +56,6 @@ docker run -p 3306:3306 --name mysql \
 
   表示将镜像mysql:8.0.15使用docker run运行
 
-  
 
   [Docker run 命令 | 菜鸟教程 (runoob.com)](https://www.runoob.com/docker/docker-run-command.html)
 
@@ -292,13 +290,13 @@ docker run -p 5672:5672 -p 15672:15672 --name rabbitmq \
 
 [消息中间件RabbitMQ需要知道的6个端口的作用_i++;-CSDN博客_rabbitmq需要开放的端口](https://blog.csdn.net/qq_37356556/article/details/104700411)
 
-| 端口       | 作用                                                         |
-| ---------- | ------------------------------------------------------------ |
-| 15672      | 管理界面ui使用的端口,使用http://localhost:15672打开管理界面  |
-| 15671      | 管理监听端口                                                 |
+| 端口         | 作用                                       |
+| ---------- | ---------------------------------------- |
+| 15672      | 管理界面ui使用的端口,使用http://localhost:15672打开管理界面 |
+| 15671      | 管理监听端口                                   |
 | 5672, 5671 | AMQP 0-9-1 without and with TLS(Transport Layer Security) client端通信口 |
-| 4369       | （epmd)epmd代表 Erlang端口映射守护进程，erlang发现口         |
-| 25672      | ( Erlang distribution） server间内部通信口                   |
+| 4369       | （epmd)epmd代表 Erlang端口映射守护进程，erlang发现口    |
+| 25672      | ( Erlang distribution） server间内部通信口      |
 
 - 进入容器并开启管理功能：
 
@@ -507,19 +505,23 @@ java                  8                   d23bdf5b1b1b        3 years ago       
     如
 
     ```bash
-    
+
     ## 主从复制实践之前
-docker start redis mongo elasticsearch kibana rabbitmq mysql nginx 
-    
+    docker start redis mongo elasticsearch kibana rabbitmq mysql nginx 
+
     ## 主从复制实践之后,删除了mysql容器,改为添加mysql-master容器和mysql-slave容器
     docker start mysql-master mysql-slave redis mongo elasticsearch kibana rabbitmq nginx
     ```
-    
-    
+
+    ​
 
 ![](../images/mall_linux_deploy_10.png)
 
 ## SpringBoot应用部署(windows上使用docker打包,所以也要配置一下windows的docker)
+
+#### 打包并上传mall应用的镜像
+
+需要打包mall-admin、mall-search、mall-portal的docker镜像，具体参考：[使用Maven插件为SpringBoot应用构建Docker镜像](../reference/docker_maven.md)    [使用Dockerfile为SpringBoot应用构建Docker镜像](../reference/docker_compose.md)
 
 ### **Idea 连接 CentOS7虚拟机中的Docker**
 

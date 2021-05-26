@@ -1,4 +1,4 @@
-学习不走弯路，[关注公众号](#公众号) 回复「学习路线」，获取mall项目专属学习路线！
+
 
 # 使用Maven插件为SpringBoot应用构建Docker镜像
 >本文主要介绍如何使用Maven插件将SpringBoot应用打包为Docker镜像，并上传到私有镜像仓库Docker Registry的过程。
@@ -106,11 +106,11 @@ spring:
 >注意：依赖的基础镜像需要先行下载，否则会出现构建镜像超时的情况，比如我本地并没有java8的镜像，就需要先把镜像pull下来，再用maven插件进行构建。
 
 - 执行maven的package命令:  
-![](../images/refer_screen_68.png)
+  ![](../images/refer_screen_68.png)
 - 构建成功:  
-![](../images/refer_screen_66.png)
+  ![](../images/refer_screen_66.png)
 - 镜像仓库已有该镜像：  
-![](../images/refer_screen_67.png)
+  ![](../images/refer_screen_67.png)
 
 ## 运行mall-tiny-docker项目
 
@@ -168,12 +168,10 @@ firewall-cmd --zone=public --add-port=8080/tcp --permanent
 firewall-cmd --reload
 ```
 - 进行访问测试，地址：[http://192.168.3.101:8080/swagger-ui.html](http://192.168.3.101:8080/swagger-ui.html)
-![](../images/refer_screen_73.png)
+  ![](../images/refer_screen_73.png)
 
 ## 项目源码地址
 
 [https://github.com/macrozheng/mall-learning/tree/master/mall-tiny-docker](https://github.com/macrozheng/mall-learning/tree/master/mall-tiny-docker)
 
-## 公众号
 
-![公众号图片](http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/banner/qrcode_for_macrozheng_258.jpg)

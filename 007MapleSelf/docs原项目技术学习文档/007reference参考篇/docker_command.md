@@ -1,4 +1,4 @@
-学习不走弯路，[关注公众号](#公众号) 回复「学习路线」，获取mall项目专属学习路线！
+
 
 # 还在百度Docker命令？推荐一套我用起来特顺手的命令！
 
@@ -393,8 +393,4 @@ docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
 ```bash
 docker volume rm $(docker volume ls -qf dangling=true)
 ```
-
-## 公众号
-
-![公众号图片](http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/banner/qrcode_for_macrozheng_258.jpg)
 
