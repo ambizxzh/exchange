@@ -8,7 +8,7 @@
 
 ## docker-compose环境搭建及使用
 
-具体参考：[使用Docker Compose部署SpringBoot应用](../reference/docker_compose.md)
+具体参考：[使用Docker Compose部署SpringBoot应用](../reference/007docker_compose.md)
 
 ## mall项目的docker-compose部署
 
