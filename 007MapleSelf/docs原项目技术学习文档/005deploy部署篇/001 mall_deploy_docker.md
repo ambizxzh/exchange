@@ -547,7 +547,7 @@ docker需要的windows 的Hyper v与VMware不需要Hyper v起了冲突,解决办
 
 - 在idea右边的maven选项中,直接双击根项目`mall`的`package`命令可以一次性打包所有应用的Docker镜像；
 
-![image-20210504114118285](C:\Users\ZXZH\AppData\Roaming\Typora\typora-user-images\image-20210504114118285.png)
+![image-20210504114118285](..\images\image-20210504114118285.png)
 
 ![](../images/mall_linux_deploy_12.png)
 
