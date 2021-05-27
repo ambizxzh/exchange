@@ -9,12 +9,12 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.maple</groupId>
-    <artifactId>web</artifactId>
+    <artifactId>web-tiny-02-swaggerui</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>web</name>
     <description>Demo project for Spring Boot</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>8</java.version>
     </properties>
     <dependencies>
             <!--SpringBoot通用依赖模块-->
